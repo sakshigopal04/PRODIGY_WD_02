@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stopwatch</title>
+    <link
+      rel="icon"
+      href="https://static.vecteezy.com/system/resources/previews/010/148/342/original/stopwatch-icon-sign-symbol-design-free-png.png"
+    />
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      width: 100%;
+      height: 100vh;
+      background-image: url('https://64.media.tumblr.com/d60f7fc51dc8ce8ee6d453a040f93e20/tumblr_pt1p0vW1fk1ypk8voo2_540.gif');
+      /* filter: blur(12px); */
+      background-position: center;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .container {
+      padding: 1rem;
+      max-width: 500px;
+      text-align: center;
+      position: fixed;
+      border-radius: 20px;
+      /* box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;; */
+      box-shadow: rgba(0, 0, 0, 22) 0px 22px 70px 4px;
+      /* box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset; */
+      background-color: rgba(77, 20, 20, 0.6);
+    }
+
+    .time {
+      padding: 1rem 0;
+      font-size: 2rem;
+    }
+
+    h1,
+    p {
+      color: #ffffff;
+    }
+
+    button {
+      padding: 0.4rem 1rem;
+      margin: 0 0.2rem;
+      position: static;
+      border-radius: 5px;
+      border: 1px solid #ffffff;
+      box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    }
+
+    button:hover {
+      background-color: rgba(0, 0, 0, 0.4);
+      color: #ffffff;
+      border: none;
+      display: flexbox;
+    }
+
+    .laps-container {
+      text-align: left;
+      margin-top: 1rem;
+      padding-left: 1rem;
+      color: #ffffff;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <h1>StopWatch</h1>
+      <p class="time">
+        <span id="minutes">00</span>:<span id="seconds">00</span>:<span
+          id="tens"
+          >00</span
+        >
+      </p>
+      <button id="start">START</button>
+      <button id="stop">STOP</button>
+      <button id="reset">RESET</button>
+      <button id="lapse">LAPSE</button>
+      <div class="laps-container" id="lapsContainer"></div>
+    </div>
+  </body>
+
+  <script>
+    window.onload = function () {
+  let minutes = 0;
+  let seconds = 0;
+  let tens = 0o0;
+  let appendMinutes = document.querySelector("#minutes");
+  let appendTens = document.querySelector("#tens");
+  let appendSeconds = document.querySelector("#seconds");
+  let startBtn = document.querySelector("#start");
+  let stopBtn = document.querySelector("#stop");
+  let resetBtn = document.querySelector("#reset");
+  let lapseBtn = document.querySelector("#lapse");
+  let lapsContainer = document.querySelector("#lapsContainer");
+  let Interval;
+  let lapseCount = 1;
+
+  const startTimer = () => {
+    tens++;
+    if (tens <= 9) {
+      appendTens.innerHTML = "0" + tens;
+    }
+    if (tens > 9) {
+      appendTens.innerHTML = tens;
+    }
+
+    if (tens > 99) {
+      seconds++;
+      appendSeconds.innerHTML = seconds <= 9 ? "0" + seconds : seconds;
+      tens = 0;
+      appendTens.innerHTML = "0" + 0;
+    }
+
+    if (seconds > 59) {
+      minutes++;
+      appendMinutes.innerHTML = minutes <= 9 ? "0" + minutes : minutes;
+      seconds = 0;
+      appendSeconds.innerHTML = "0" + 0;
+    }
+  };
+
+  startBtn.onclick = () => {
+    clearInterval(Interval);
+    Interval = setInterval(startTimer, 10);
+  };
+
+  stopBtn.onclick = () => {
+    clearInterval(Interval);
+  };
+
+  resetBtn.onclick = () => {
+    clearInterval(Interval);
+    tens = "00";
+    seconds = "00";
+    minutes = "00";
+    appendTens.innerHTML = tens;
+    appendSeconds.innerHTML = seconds;
+    appendMinutes.innerHTML = minutes;
+    lapsContainer.innerHTML = "";
+    lapseCount = 1; // Reset the lapse count
+  };
+
+  lapseBtn.onclick = () => {
+    // Record lapses
+    const lapseTime =
+      appendMinutes.innerHTML +
+      ":" +
+      appendSeconds.innerHTML +
+      ":" +
+      appendTens.innerHTML;
+
+    const lapseItem = document.createElement("p");
+    lapseItem.innerText = `Lap ${lapseCount++}: ${lapseTime}`;
+
+    lapsContainer.appendChild(lapseItem);
+  };
+};
+  
+  </script>
+</html>
